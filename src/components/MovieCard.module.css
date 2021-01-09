@@ -14,9 +14,11 @@
 @keyframes maskFadeIn {
   from {
     opacity: 0;
+    display: none;
   }
   to {
     opacity: 0.6;
+    display: block;
   }
 }
 

@@ -30,6 +30,17 @@ export const searchMovies = createAsyncThunk(
   }
 );
 
+export const getSimilarMovies = createAsyncThunk(
+  "movies/getSimilarMovies",
+  async (movieID) => {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${movieID}/similar?api_key=${process.env.REACT_APP_API_KEY}&language=en-US&page=1`
+    );
+    const data = await response.json();
+    return data;
+  }
+);
+
 export const counterSlice = createSlice({
   name: "trends",
   initialState: {
@@ -38,6 +49,7 @@ export const counterSlice = createSlice({
     searchedMovies: [],
     favoriteMovies: [],
     favoritesIDs: [],
+    similarMovies: [],
   },
   reducers: {
     resetQuery(state) {
@@ -46,28 +58,36 @@ export const counterSlice = createSlice({
     addFavorites(state, action) {
       if (
         state.favoriteMovies.filter((movie) => {
-          return movie.id == action.payload;
+          return movie.id == action.payload.id;
         }).length > 0
       ) {
         const favArray = state.favoriteMovies.filter((movie) => {
-          return movie.id !== action.payload;
+          return movie.id !== action.payload.id;
         });
         state.favoriteMovies = favArray;
         const favIDs = state.favoritesIDs.filter((id) => {
-          return id != action.payload;
+          return id != action.payload.id;
         });
         state.favoritesIDs = favIDs;
       } else {
-        if (state.searchedMovies.length > 1) {
+        if (action.payload.fromSimilar === "true") {
+          const filteredMovie = state.similarMovies.filter((movie) => {
+            console.log(movie);
+            return movie.id === action.payload.id;
+          });
+          state.favoriteMovies = [...state.favoriteMovies, ...filteredMovie];
+          state.favoritesIDs = [...state.favoritesIDs, filteredMovie[0].id];
+        } else if (state.searchedMovies.length > 1) {
           const filteredMovie = state.searchedMovies.filter((movie) => {
-            return movie.id === action.payload;
+            return movie.id === action.payload.id;
           });
           state.favoriteMovies = [...state.favoriteMovies, ...filteredMovie];
           state.favoritesIDs = [...state.favoritesIDs, filteredMovie[0].id];
         } else {
           const filteredMovie = state.trendingMovies.filter((movie) => {
-            return movie.id === action.payload;
+            return movie.id === action.payload.id;
           });
+
           state.favoriteMovies = [...state.favoriteMovies, ...filteredMovie];
           state.favoritesIDs = [...state.favoritesIDs, filteredMovie[0].id];
         }
@@ -84,6 +104,9 @@ export const counterSlice = createSlice({
     },
     [searchMovies.fulfilled]: (state, action) => {
       state.searchedMovies = [...action.payload.results];
+    },
+    [getSimilarMovies.fulfilled]: (state, action) => {
+      state.similarMovies = [...action.payload.results];
     },
   },
 });

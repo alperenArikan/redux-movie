@@ -28,4 +28,5 @@ code {
 }
 .pointer {
   cursor: pointer;
+  margin: 0 auto;
 }

@@ -3,7 +3,7 @@ import Jumbotron from "../components/Jumbotron";
 import { useDispatch, useSelector } from "react-redux";
 import { getTrends } from "../features/counter/movieSlice";
 import MovieCard from "../components/MovieCards";
-import { Container, Row } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 const Home = () => {
   const { movieReducer } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -25,28 +25,45 @@ const Home = () => {
           {movieReducer.searchedMovies.length === 0
             ? movieReducer.trendingMovies.map((movie) => {
                 return (
-                  <MovieCard
-                    key={movie.id}
-                    id={movie.id}
-                    title={movie.original_title}
-                    overview={movie.overview}
-                    img={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                  ></MovieCard>
+                  <Col
+                    style={{ marginBottom: "1rem", position: "relative" }}
+                    xs="12"
+                    sm="6"
+                    md="4"
+                  >
+                    <MovieCard
+                      key={movie.id}
+                      id={movie.id}
+                      title={movie.original_title}
+                      overview={movie.overview}
+                      img={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                    ></MovieCard>
+                  </Col>
                 );
               })
             : movieReducer.searchedMovies.map((movie) => {
                 return (
-                  <MovieCard
-                    key={movie.id}
-                    id={movie.id}
-                    title={movie.original_title}
-                    overview={movie.overview}
-                    img={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
-                        : null
-                    }
-                  ></MovieCard>
+                  <Col
+                    style={{
+                      marginBottom: "1rem",
+                      position: "relative",
+                    }}
+                    xs="12"
+                    sm="6"
+                    md="4"
+                  >
+                    <MovieCard
+                      key={movie.id}
+                      id={movie.id}
+                      title={movie.original_title}
+                      overview={movie.overview}
+                      img={
+                        movie.poster_path
+                          ? `https://image.tmdb.org/t/p/w500/${movie.poster_path}`
+                          : null
+                      }
+                    ></MovieCard>
+                  </Col>
                 );
               })}
         </Row>
