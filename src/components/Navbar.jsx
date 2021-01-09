@@ -11,8 +11,8 @@ import {
 import { Link } from "@reach/router";
 import { useDispatch, useSelector } from "react-redux";
 import { searchMovies } from "../features/counter/movieSlice";
-import SearchResults from "./SearchResults";
 import { resetQuery } from "../features/counter/movieSlice";
+
 const Brand = () => {
   return (
     <Link to="/">
@@ -21,9 +21,8 @@ const Brand = () => {
   );
 };
 
-const NavbarComponent = (props) => {
+const NavbarComponent = ({ pathname }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { movieReducer } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
 
@@ -56,7 +55,9 @@ const NavbarComponent = (props) => {
             />
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <Link to="/" className="nav-link"></Link>
+                <Link to="/favorites" className="nav-link">
+                  Favorites
+                </Link>
               </NavItem>
               <NavItem>
                 <Link to="/" className="nav-link">
@@ -66,11 +67,6 @@ const NavbarComponent = (props) => {
             </Nav>
           </Collapse>
         </Container>
-        {/* {movieReducer.searchedMovies.length > 0 && query.length > 0 ? (
-          <SearchResults data={movieReducer.searchedMovies} />
-        ) : (
-          ""
-        )} */}
       </Navbar>
     </div>
   );

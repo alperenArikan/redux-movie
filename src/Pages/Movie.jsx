@@ -10,15 +10,13 @@ import {
   Col,
   Button,
 } from "reactstrap";
+import { useLocation } from "@reach/router";
 const Movie = ({ id }) => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getMovieDetails(id));
   }, []);
-
   const { movieReducer } = useSelector((state) => state);
-  console.log(movieReducer);
   return (
     <div style={{ backgroundColor: "rgb(230, 255, 255)" }}>
       <div
